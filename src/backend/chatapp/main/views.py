@@ -9,7 +9,6 @@ from rest_framework  import generics
 from .models import Message
 from rest_framework.views import APIView
 
-
 """
 @permission_classes([IsAuthenticatedOrReadOnly])
 @api_view(['GET','POST'])
@@ -31,9 +30,7 @@ def message(request):
             return Response(serializerr.errors, status=status.HTTP_400_BAD_REQUEST)
 """
 
-
 class MessageAPI(APIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self,request,format=None):
         query= Message.objects.all()
@@ -62,4 +59,4 @@ class MessageAPI(APIView):
         if request.user == obj.author:
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response("not the owner")
+        return Response(status=status.HTTP_401_UNAUTHORIZED)

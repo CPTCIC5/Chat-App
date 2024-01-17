@@ -9,22 +9,23 @@ from users.serializers import UserCreateSerializer,LoginSerializer
 from rest_framework  import generics
 from rest_framework.permissions  import IsAuthenticated
 
-"""
 @api_view(['GET','POST'])
 def register(request):
     if request.method == 'POST':
         serializer= UserCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
+            userr= authenticate(request,username=request.data['username'],password=request.data['password'])
+            auth_login(request,userr)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response('not post')
+
+
 """
-
-
 class RegisterUserAPI(generics.CreateAPIView):
     serializer_class = UserCreateSerializer
-     
+"""
 
 @api_view(['GET','POST'])
 def login(request):

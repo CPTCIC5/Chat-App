@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'main',
     'users',
     'rest_framework'
+    "daphne",
 ]
 
 MIDDLEWARE = [
@@ -95,6 +96,11 @@ DATABASES = {
         'HOST': "localhost",
         'PORT': "5432",  # 5432 by default
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 25
 }
 
 # Password validation

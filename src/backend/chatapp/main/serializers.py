@@ -5,7 +5,7 @@ from main.models import Message
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['author','text','created_at']
+        fields = ['id','author','text','created_at']
     
 
     """

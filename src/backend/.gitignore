@@ -1,1 +1,3 @@
 env/
+chatapp/main/__pycache__/
+chatapp/users/__pycache__/

@@ -31,17 +31,18 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "daphne",
     'django.contrib.staticfiles',
     'main',
     'users',
-    'rest_framework'
-    "daphne",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -72,8 +73,8 @@ TEMPLATES = [
     },
 ]
 
-
-WSGI_APPLICATION = 'chatapp.wsgi.application'
+ASGI_APPLICATION = 'chatapp.asgi.application'
+#WSGI_APPLICATION = 'chatapp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

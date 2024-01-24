@@ -1,6 +1,9 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from .serializers import MessageSerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -19,20 +22,27 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
-        #print('msg',message)
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "message": message}
-        )
         
+        data = {"author":self.scope['user'],"text":message}
+        serializer = MessageSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name, {"type": "chat.message", "data": serializer.data}
+        )
+
     
-    # Receive message from room group
+    # Send the data 
     def chat_message(self, event):
         message = event["message"]
         print('msg0',message)
         # Send message to WebSocket
         self.send(text_data=json.dumps({"message": message}))
 
+        
+
+        
     #as soon as user disconnects this fn runs
     def disconnect(self, code):
         user = self.scope["user"]

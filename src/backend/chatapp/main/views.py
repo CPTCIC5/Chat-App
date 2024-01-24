@@ -37,6 +37,7 @@ class MessageAPI(APIView):
         serializer = MessageSerializer(query, many=True)
         return Response(serializer.data)
     
+    
     def post(self,request,format=None):
         data= {"author":request.user.id,"text":request.data.get("text")}
         serializerr = MessageSerializer(data=data)
@@ -45,6 +46,8 @@ class MessageAPI(APIView):
             return Response(serializerr.data,status=status.HTTP_201_CREATED)
         return Response(serializerr.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    
+
     def put(self,request,pk,format=None):
         obj = get_object_or_404(Message,pk=pk)
         data= {"author": obj.author,"text":request.data.get("text",obj)}

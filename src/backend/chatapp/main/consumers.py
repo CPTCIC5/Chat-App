@@ -7,7 +7,6 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_group_name="chat"
         user = self.scope['user']
-        print('usr',user)
         if user.is_anonymous: 
             return self.close(401)
         
@@ -16,10 +15,9 @@ class ChatConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(self.room_group_name,self.channel_name)
         self.accept()
 
-    def chat_message(self,event):
-        message = event["message"]
-        text_data=json.dumps({"message": message})
-        self.send(text_data)
+
+    def receive(self, text_data=None, bytes_data=None):
+        pass
 
     #as soon as user disconnects this fn runs
     def disconnect(self, code):

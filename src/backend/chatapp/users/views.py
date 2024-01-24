@@ -8,6 +8,8 @@ from rest_framework import status
 from users.serializers import UserCreateSerializer,LoginSerializer
 from rest_framework  import generics
 from rest_framework.permissions  import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
+
 
 @api_view(['GET','POST'])
 def register(request):
@@ -31,14 +33,15 @@ class RegisterUserAPI(generics.CreateAPIView):
 def login(request):
     if request.method == 'POST':
         login_serializer = LoginSerializer(data=request.data)
-        login_serializer.is_valid(raise_exception=True)
-        user = authenticate(request,**login_serializer.data)
-        if user is  None:
-            return Response({'detail': 'Account with the given credentials does not exist'},
+        if login_serializer.is_valid():
+            user = authenticate(request,**login_serializer.data)
+            if user is  None:
+                return Response({'detail': 'Account with the given credentials does not exist'},
                             status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-        if not user.is_active:
-             return Response({'detail': 'User is not active'}, status=status.HTTP_401_UNAUTHORIZED)
-        auth_login(request,user)
+            elif not user.is_active:
+                return Response({'detail': 'User is not active'}, status=status.HTTP_401_UNAUTHORIZED)
+            auth_login(request,user)
+            return Response(login_serializer.data,status=status.HTTP_201_CREATED)
         return Response('login hogya')
 
 @permission_classes([IsAuthenticated])

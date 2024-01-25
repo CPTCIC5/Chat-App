@@ -8,20 +8,29 @@ from rest_framework import status
 from users.serializers import UserCreateSerializer,LoginSerializer
 from rest_framework  import generics
 from rest_framework.permissions  import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
 
 
 @api_view(['GET','POST'])
 def register(request):
     if request.method == 'POST':
+
         serializer= UserCreateSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            userr= authenticate(request,username=request.data['username'],password=request.data['password'])
-            auth_login(request,userr)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+
+            if serializer.validated_data.get("password") == serializer.validated_data.get("confirm_password"):
+                #print('xyzz',serializer.validated_data.get("password"),serializer.validated_data.get("confirm_password"))
+
+                serializer.validated_data.pop("confirm_password") #Delete confirm_password before saving the data
+                serializer.save()
+                userr= authenticate(request,username=request.data['username'],password=request.data['password'])
+                auth_login(request,userr)
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+            
+            return Response("Password and Confirm-Password didnt match")
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response('not post')
+    
+    return('not post')
 
 
 """

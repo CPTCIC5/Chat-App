@@ -12,6 +12,9 @@ function Navbar()
           <li>
             <a href="#chat">Chat</a>
           </li>
+          <li>
+            <a href="#register">Register</a>
+          </li>
         </ul>
       </nav>
     </header>

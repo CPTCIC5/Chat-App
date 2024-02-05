@@ -23,13 +23,13 @@ export default function Login() {
         password: formData.password,
       });
       console.log(response.data); // Do something with the response
+      alert("Logged In!")
     } catch (error) {
       console.error('Error submitting the form:', error);
     }
   };
 
   return (
-    <>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -49,6 +49,5 @@ export default function Login() {
         />
         <input type="submit" value="Submit" />
       </form>
-    </>
   );
 }

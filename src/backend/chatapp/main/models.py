@@ -12,3 +12,6 @@ class Message(models.Model):
     
     class Meta:
         ordering = ['-id']
+        # ordering by id instead of created_at, smart lol
+        # no no i was seriou
+        # :sunglasses:

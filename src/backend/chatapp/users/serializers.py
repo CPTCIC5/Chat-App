@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 #model serializers provide in built connectivity of the field like modelforms in forms of django,
 # model seriaizers also
+#cools
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +20,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     """
+    #thats why i said checking if password == confirm_password in the frontend itself is easier
+    #yes and takes less memory, agreed.
     #2nd way for confirm_password
     def validate(self, data):
         if data['password'] != data['confirm_password']:

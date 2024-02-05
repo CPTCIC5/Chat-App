@@ -2,8 +2,6 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from .serializers import MessageSerializer
-from rest_framework.response import Response
-from rest_framework import status
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -22,14 +20,15 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
-        
-        data = {"author":self.scope['user'],"text":message}
+
+        data = {"author": self.scope['user'].id, "text": message} 
         serializer = MessageSerializer(data=data)
+        
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            
+
         async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "data": serializer.data}
+            self.room_group_name, {"type": "chat.message",'message':message}
         )
 
     
@@ -38,6 +37,8 @@ class ChatConsumer(WebsocketConsumer):
         message = event["message"]
         print('msg0',message)
         # Send message to WebSocket
+
+        # send the whole message object instead of only the message text
         self.send(text_data=json.dumps({"message": message}))
 
         
@@ -47,8 +48,7 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, code):
         user = self.scope["user"]
         if user.is_anonymous:
-            return ""
-        async_to_sync(self.channel_layer.group_discard)(self.room_group_name,self.channel_name)
+            return async_to_sync(self.channel_layer.group_discard)(self.room_group_name,self.channel_name)
         #user.is_online = False
         #user.save()
         

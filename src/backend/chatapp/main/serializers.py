@@ -9,6 +9,8 @@ class MessageSerializer(serializers.ModelSerializer):
     
 
     """
+    #no need for this
+    #just remove this entirely
     def create(self, validated_data):
         return Message.objects.create(author=self.context['request'].user,text=validated_data['text'])
     """

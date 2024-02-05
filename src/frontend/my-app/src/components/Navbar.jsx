@@ -7,13 +7,13 @@ function Navbar()
       <nav>
         <ul>
           <li>
-            <a href="#login">Login</a>
+            <a href="/login">Login</a>
           </li>
           <li>
             <a href="#chat">Chat</a>
           </li>
           <li>
-            <a href="#register">Register</a>
+            <a href="/register">Register</a>
           </li>
         </ul>
       </nav>
